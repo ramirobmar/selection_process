@@ -1,0 +1,449 @@
+//################# LIBRARIES ################
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <curl/curl.h>
+#include "mraa.hpp"
+
+#include <map>
+#include <unistd.h>
+#include <iostream>
+#include <sstream>
+
+#include <time.h>
+
+
+#include "cJSON.h"
+
+using namespace std;
+
+//################ CKAN VARIABLES ################
+
+string body="";
+
+const string CONTENT="'application/json'";
+const string CKAN_APIKEY="f1d1af32-7a08-4a07-94e8-35243b54ec75";
+const string CKAN_RESOURCE ="f0b10490-b45d-4e92-85ae-3989cf72705b";
+const string CKAN_SERVER = "demo.ckan.org";
+const string url = "http://"+ CKAN_SERVER + "/api/action/datastore_upsert"; //resource_id=" + CKAN_RESOURCE;
+
+
+const float SENSOR_LATITUD=40.6295047;
+const float SENSOR_LONGITUD=-3.172255;
+const string SENSOR_ID = "AF01234518";
+const string MAGNITUD= "'Kwh'";
+const string DESCRIPCION_SENSOR="Power-Electricity Sensor";
+
+typedef struct _HttpResponse {
+    long code;                
+    char *data;               
+} HttpResponse; 
+
+
+struct sensor{
+	char Identificador[12];
+	float Longitud;
+	float Latitud;
+	float Medida;
+	char Magnitud[12];
+	char Descripcion[25];	
+	char Fecha[25];
+};
+
+typedef struct sensor str_sensor;
+
+void print_data_sensor(str_sensor * sensor_device)
+{
+	cout << "SENSOR DEVICE: " << (char *)sensor_device->Identificador << endl;
+	cout << "UBICACION: " << endl;
+	cout << "	LONGITUD: " << (float)sensor_device->Longitud << endl;
+	cout << "	LATITUD:  " << (float)sensor_device->Latitud << endl;
+	cout << "MEDIDA: " << (float)sensor_device->Medida << endl;
+	cout << "MAGNITUD: " << (char *)sensor_device->Magnitud << endl;
+	cout << "DESCRIPCION " << (char *)sensor_device->Descripcion << endl;
+	cout << "FECHA: " << (char *)sensor_device->Fecha << endl;
+
+}
+
+                                                                              
+size_t static curl_write_callback_func(char *buffer,size_t size,size_t nitems,void **outstream)
+{
+	size_t write_length;
+	char * fragment;
+	int size_stream=0;
+	char *output;
+
+	try{
+		if(*outstream != NULL)
+		{
+			fragment=(char *)strndup((const char*)buffer, (size_t)(size * nitems));
+			size_stream = strlen((char *)*outstream);
+			size_stream += strlen(fragment) + 1;
+			*outstream = (char *)realloc((char*)*outstream,size_stream);
+			strcat((char *)*outstream,fragment);	
+			write_length=strlen((char *)*outstream);
+			free(fragment);
+		}else{
+
+			*outstream=(char *)strndup((const char *)buffer, (size_t)(size * nitems));
+			write_length=strlen((char *)*outstream);
+		}
+	}catch(std::exception& e)                                                                                            
+        {                                                                                                                    
+        	cout << "Excepcion: " << e.what() << endl;                                                                               
+        } 
+	
+	return write_length;
+
+}
+
+string int_to_string(int i)
+{
+    stringstream ss;
+    ss << i;
+    return ss.str();
+}
+
+char * getrecord(char *out,char *buffer,char *Identificador);
+
+void doit(char *text,str_sensor * sensor_device)                                                        
+{                                                                             
+        char *out;cJSON *json;                                                 
+	int pos_ini,pos_fin,i,index=0;       
+	char *aux_str=NULL,*buffer=NULL;
+	char data[75];
+        char * record_str=(char *)malloc(sizeof(char*)*strlen(text));                                                                                       
+        
+	json=cJSON_Parse(text);
+        if (!json) {printf("Error before: [%s]\n",cJSON_GetErrorPtr());}
+        else                                                                                        
+        {                                                     
+	        out=cJSON_PrintUnformatted(json);
+		aux_str=strstr(out,"records");
+		if(aux_str != NULL)
+		{
+			pos_ini=(int)(aux_str-out);
+			pos_fin=strlen(out);
+			index=0;
+			for(i=pos_ini;i<pos_fin;i++)
+				record_str[index++]=out[i];
+			record_str[index]='\0';
+			aux_str=strstr(record_str,"[{");
+			pos_ini=(int)(aux_str-record_str);
+			aux_str=strstr(record_str,"}]");
+			pos_fin=(int)(aux_str-record_str);
+			buffer=(char *)malloc(sizeof(char)*(pos_fin-pos_ini+1));
+			index=0;
+			for(i=pos_ini+2;i<pos_fin;i++)
+				buffer[index++]=record_str[i];
+			getrecord(data,buffer,(char *)"Identificador");
+			strcpy(sensor_device->Identificador,data);
+			getrecord(data,buffer,(char *)"Fecha");
+			strcpy(sensor_device->Fecha,data);
+			getrecord(data,buffer,(char *)"Longitud");
+			sensor_device->Longitud=atof(data);
+			getrecord(data,buffer,(char *)"Latitud");
+			sensor_device->Latitud=atof(data);
+			getrecord(data,buffer,(char *)"Medida");
+			sensor_device->Medida=atof(data);
+			getrecord(data,buffer,(char *)"Magnitud");
+			strcpy(sensor_device->Magnitud,data);
+			getrecord(data,buffer,(char *)"Descripcion");
+			strcpy(sensor_device->Descripcion,data);
+			
+			cJSON_Delete(json);                                     
+                	//printf("%s\n",record_str);                                     
+			free(buffer);
+		}
+		free(out);
+		free(record_str);
+		                                    
+        }                                                           
+}   
+char * getrecord(char *out,char *buffer,char *Identificador)
+{
+	int pos_ini,pos_fin,i,index,completed=0,count=0;
+	char *aux;
+	aux=strstr(buffer,Identificador);
+	if(aux!=NULL)
+	{
+		pos_ini=(int)((aux-buffer)+(strlen(Identificador)+2));
+		pos_fin=strlen(buffer);
+		index=0;
+		for(i=pos_ini;(i<pos_fin)&&(!completed);i++)
+		{
+			if(buffer[i]=='"')
+			{
+				count++;
+				if(count==2)
+					completed=1;
+			}
+			else{
+				out[index++]=buffer[i];
+			}
+		}
+		out[index]='\0';
+		return out;
+	}
+	else
+		return NULL;
+
+}
+
+
+
+void format_ckan_register(char * out, char * in)
+{
+	char *aux;int index;
+	aux=strstr(in,(char*)"[{");
+	int pos_ini=(int)(aux-in);
+	aux=strstr(in,(char*)"}]");
+	int pos_fin=(int)(aux-in)+1;
+	if(aux!=NULL)
+	{
+		strncpy(out,in,pos_ini+2);
+		out[pos_ini+2]='\0';
+		int index_out=pos_ini;
+		out[index_out++]='[';
+		out[index_out++]='{';
+		for(index=pos_ini+1;index<pos_fin;index++)
+		{
+			if( (in[index]!='{') and (in[index]!='}') )
+				out[index_out++]=in[index];
+
+		}
+		out[index_out++]='}';
+		out[index_out++]=']';
+		out[index_out++]='}';
+		out[index_out]='\0';
+		
+	}
+
+}
+
+
+void readsensors(mraa::Aio* a0_pin, mraa::Aio* a1_pin)
+{
+
+	// Dictionary to persist Sensor values
+	typedef map <string, string> Table;
+	Table measures;
+	//Reading Light sensor
+	int lum = a0_pin->read();
+
+	//Reading Button sensor
+	int touch = a1_pin->read();
+	string pulse = "false";
+		if(touch>100){
+		  pulse = "true";
+		}
+	// save lumininosity value in the dictionary
+	measures["p"]=pulse;
+	measures["l"]=int_to_string(lum);
+
+	for (Table::const_iterator it = measures.begin(); it != measures.end(); ++it) {
+		//add measures separator "#" to the body only when it is not the last measure
+		if (body != "") {
+			 body += "#";
+		}
+		//FIWARE IoT Stack body message
+		body += it->first + "|" + it->second;
+	}
+
+}
+
+
+void format_records(cJSON * record, const char * field, const char * value)
+{                                                                                                    
+        cJSON *auxiliar;
+	auxiliar=cJSON_CreateObject();                                                                  
+        cJSON_AddStringToObject(auxiliar,field,value);                                                      
+	cJSON_AddItemToArray(record,auxiliar);
+}  
+
+
+void getmeasures(str_sensor * sensor_device, string Identificador){
+	
+	CURL * curl;
+	CURLcode res;
+
+	HttpResponse *response=(HttpResponse *)malloc(sizeof(HttpResponse));
+	response->data=(char *)malloc(sizeof(char) * 1024);
+	strcpy(response->data,"");
+
+	const string url_datastore_search = "http://"+ CKAN_SERVER + "/api/action/datastore_search" + "?" + "resource_id=" + CKAN_RESOURCE + "&q=" + Identificador; 
+	const string header_auth_str="Authorization: " + CKAN_APIKEY;
+	const string header_content_str="Content-Type: " + CONTENT;
+
+	char urlChar[url_datastore_search.length()];                                                                           
+        strcpy(urlChar, url_datastore_search.c_str()); 
+	
+	curl = curl_easy_init();
+		
+	if(curl) {                                                                                  
+                curl_easy_setopt(curl, CURLOPT_URL, urlChar);                                        
+                                                                                                    
+                struct curl_slist *headers = NULL;                                                  
+                                                                                                    
+                headers = curl_slist_append(headers,header_content_str.c_str());                              
+                headers = curl_slist_append(headers,header_auth_str.c_str());                                 
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);                                          
+                                                                                                              
+
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_callback_func);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void **)&response->data);
+
+
+		try{
+        		res = curl_easy_perform(curl);                    
+ 			                                                                                       
+        		if(response) {                                                                  
+				response->code = 0;                                                         
+            			curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &response->code); 
+				doit((char *)response->data,sensor_device);
+				print_data_sensor(sensor_device);
+        		}                                                                      
+                                                                               
+        		if(res != CURLE_OK)                                                   
+            			cerr << "GET: ERROR -  " << curl_easy_strerror(res) << endl;
+        		else{
+				cout << "GET: OK! " << endl;          
+		}
+		}catch(std::exception& e)
+		{
+			cout << "Excepcion: " << e.what() << endl;
+		}
+
+
+        }
+	free(response->data);
+	free(response);                                                                                                     
+        curl_easy_cleanup(curl);                                                                              
+
+
+}
+
+
+
+void postmeasures(str_sensor * sensor_device){
+		
+	const string header_auth_str="Authorization: " + CKAN_APIKEY;                                                                
+        const string header_content_str="Content-Type: "+ CONTENT;                                                                   
+        
+	CURL *curl;
+	CURLcode res;
+	char aux_str[25];
+	int i;
+	char bodyChar[body.length()];
+	cJSON *root,*regs;                                                                         
+        char * out;                                                                               
+	HttpResponse *response=(HttpResponse *)malloc(sizeof(HttpResponse));                        
+        response->data=(char *)malloc(sizeof(char) * 1024);                                         
+        strcpy(response->data,"");	
+	
+                                                                                                
+        root=cJSON_CreateObject();                                                                
+		
+	cJSON_AddStringToObject(root,"resource_id",CKAN_RESOURCE.c_str());
+	cJSON_AddStringToObject(root,"method","insert");
+	cJSON_AddStringToObject(root,"force","True");
+	cJSON_AddItemToObject(root,"records",regs=cJSON_CreateArray());
+	format_records(regs,(const char*)"Identificador",(const char*)sensor_device->Identificador);
+	sprintf(aux_str,"%.6f",sensor_device->Longitud);
+	format_records(regs,(const char*)"Longitud",(const char*)aux_str);
+	sprintf(aux_str,"%.7f",sensor_device->Latitud);
+	format_records(regs,(const char*)"Latitud",(const char*)aux_str);
+	sprintf(aux_str,"%.2f",sensor_device->Medida);	
+	format_records(regs,(const char*)"Medida",(const char*)aux_str);
+	format_records(regs,(const char*)"Magnitud",(const char*)sensor_device->Magnitud);
+	format_records(regs,(const char*)"Descripcion",(const char*)sensor_device->Descripcion);
+	format_records(regs,(const char*)"Fecha",(const char*)sensor_device->Fecha);
+
+	out=cJSON_PrintUnformatted(root); 
+	char urlChar[url.length()];
+	strcpy(urlChar, url.c_str());
+	curl = curl_easy_init();
+
+
+	char *output=(char *)malloc(sizeof(char)*512);
+	format_ckan_register(output,out);
+
+
+	if(curl) {
+		
+		curl_easy_setopt(curl, CURLOPT_URL, urlChar);
+		struct curl_slist *headers = NULL;
+		headers = curl_slist_append(headers,header_content_str.c_str());
+		headers = curl_slist_append(headers,header_auth_str.c_str());
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, output); 		
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);                                 
+                curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_callback_func);            
+                curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void **)&response->data);                
+		
+		res = curl_easy_perform(curl);
+		if(response) {                                                                                               
+                	response->code = 0;                                                                                  
+                        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &response->code);                                   
+                }  
+		if(res != CURLE_OK)
+			cerr << "POST: ERROR!" << curl_easy_strerror(res) << endl;
+		else
+			cout << "POST: OK! " << endl;
+	}
+	free(response->data);                                                                                                        
+        free(response);                                                                                                              
+        curl_easy_cleanup(curl);	
+	free(output);	
+	body="";
+}
+
+float read_dataAFE(){
+	
+	return 1145.00;
+}
+
+void getmeasurement(str_sensor * sensor_device)
+{
+	struct tm * _fecha;
+	time_t temp;
+	char _strfecha[25];
+	
+	temp=time(NULL);
+	_fecha=localtime(&temp);        
+	sprintf(_strfecha,"%.4d-%.2d-%.2dT%.2d:%.2d:%.2d",_fecha->tm_year+1900,_fecha->tm_mon,_fecha->tm_mday,_fecha->tm_hour,_fecha->tm_min,_fecha->tm_sec);
+	
+	strcpy(sensor_device->Fecha,_strfecha);
+	strcpy(sensor_device->Identificador,SENSOR_ID.c_str());
+        sensor_device->Longitud=SENSOR_LONGITUD;                                                                                                           
+        sensor_device->Latitud=SENSOR_LATITUD;                                                                                                            
+        sensor_device->Medida=read_dataAFE();                                                                                                               
+        strcpy(sensor_device->Magnitud, MAGNITUD.c_str());                                                                                                        
+        strcpy(sensor_device->Descripcion, DESCRIPCION_SENSOR.c_str());                                                                                                     
+
+
+}
+
+int main()
+{
+	// create an analog input object for each sensor
+	// mraa::Aio* a0_pin = new mraa::Aio(0);
+	// mraa::Aio* a1_pin = new mraa::Aio(1);
+	
+	str_sensor * sensor_device;
+	sensor_device=(str_sensor *)malloc(sizeof(str_sensor)*1);
+		
+	for (;;) {
+		
+		
+		getmeasurement(sensor_device);
+		sleep(5);
+		postmeasures(sensor_device);
+		sleep(5);
+		getmeasures(sensor_device,"AF01234513");
+
+	}
+	free(sensor_device);
+	return 0;
+}
