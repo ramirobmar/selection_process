@@ -1,0 +1,183 @@
+g++ -o ./bin/IoT_RTOS  
+/home/root/ckan/build/Debug/obj/lib/os_cfg_app.o 
+/home/root/ckan/build/Debug/obj/lib/os_core.o 
+/home/root/ckan/build/Debug/obj/lib/os_dbg.o 
+/home/root/ckan/build/Debug/obj/lib/os_flag.o 
+/home/root/ckan/build/Debug/obj/lib/os_int.o 
+/home/root/ckan/build/Debug/obj/lib/os_mem.o 
+/home/root/ckan/build/Debug/obj/lib/os_mon.o 
+/home/root/ckan/build/Debug/obj/lib/os_msg.o 
+/home/root/ckan/build/Debug/obj/lib/os_mutex.o 
+/home/root/ckan/build/Debug/obj/lib/os_pend_multi.o 
+/home/root/ckan/build/Debug/obj/lib/os_prio.o 
+/home/root/ckan/build/Debug/obj/lib/os_q.o 
+/home/root/ckan/build/Debug/obj/lib/os_sem.o 
+/home/root/ckan/build/Debug/obj/lib/os_stat.o 
+/home/root/ckan/build/Debug/obj/lib/os_task.o 
+/home/root/ckan/build/Debug/obj/lib/os_tick.o 
+/home/root/ckan/build/Debug/obj/lib/os_time.o 
+/home/root/ckan/build/Debug/obj/lib/os_tmr.o 
+/home/root/ckan/build/Debug/obj/lib/os_var.o  
+/home/root/ckan/build/Debug/obj/lib/os_cpu_c.o  
+/home/root/ckan/build/Debug/obj/lib/lib_ascii.o 
+/home/root/ckan/build/Debug/obj/lib/lib_math.o 
+/home/root/ckan/build/Debug/obj/lib/lib_mem.o 
+/home/root/ckan/build/Debug/obj/lib/lib_str.o  
+/home/root/ckan/build/Debug/obj/lib/cpu_c.o  
+/home/root/ckan/build/Debug/obj/lib/cpu_core.o  
+/home/root/ckan/build/Debug/obj/application/os_app_hooks.o 
+/home/root/ckan/build/Debug/obj/application/rtos_main.o 
+-L"/usr/lib/i586-poky-linux/4.9.1" -lgcc 
+-L"/usr/lib" -lstdc++ 
+-L"/usr/lib" -lm 
+-L"/usr/lib" -ldl 
+-L"/usr/lib" -lcrypt 
+-L"/usr/lib" -lc 
+-L"/usr/lib" -lrt 
+-L"/usr/lib" -lcurl 
+-L"/usr/lib" -lpthread 
+-L"/usr/lib" -lmraa  
+-L"/usr/lib/i586-poky-linux/4.9.1" -lgcc -L"/usr/lib" -lstdc++ -L"/usr/lib" -lm -L"/usr/lib" -ldl -L"/usr/lib" -lcrypt -L"/usr/lib" -lc -L"/usr/lib" -lrt -L"/usr/lib" -lcurl -L"/usr/lib" -lpthread -L"/usr/lib" -lmraa 
+
+
+
+g++  -o /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/bin/AQ_RTOS  
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_cfg_app.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_core.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_dbg.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_flag.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_int.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_mem.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_mon.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_msg.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_mutex.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_pend_multi.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_prio.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_q.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_sem.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_stat.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_task.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_tick.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_time.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_tmr.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_var.o  
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/os_cpu_c.o  
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/lib_ascii.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/lib_math.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/lib_mem.o 
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/lib_str.o  
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/cpu_c.o  
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/lib/cpu_core.o  
+/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/application/app.o /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/application/os_app_hooks.o /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/application/datahandler.o /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/application/mqtt_client.o  
+-L"/usr/lib/x86_64-linux-gnu" -lpthread 
+-L"/usr/lib32" -lm -ldl -lcrypt -lc -lrt 
+-L/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/lib/libxively/obj -lxively 
+-L/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/lib/mqtt -lmqttc
+
+
+
+Generando el fichero: /home/root/ckan/src/application/os_app_hooks.c
+Invocando: Cross GCC Compiler
+gcc 
+-I /home/root/ckan/lib/Micrium/Software/uC-CPU 
+-I /home/root/ckan/include -I /home/root/ckan/lib/Micrium/Software/uC-CPU/Posix/GNU 
+-I /home/root/ckan/lib/Micrium/Software/uC-LIB -I /home/root/ckan/lib/Micrium/Software/uCOS-III/Source 
+-I /home/root/ckan/lib/Micrium/Software/uCOS-III/Ports/POSIX/GNU  
+-I /usr/include 
+-I ./lib/cJSON 
+-I ./lib/rest 
+-I ./lib/sensor 
+-I ./include 
+-O0 -g3 -Wall -c -fmessage-length=0  
+
+-MMD -MP -MF"/home/root/ckan/build/Debug/obj/application/os_app_hooks.d" -MT"/home/root/ckan/build/Debug/obj/application/os_app_hooks.o" -o "/home/root/ckan/build/Debug/obj/application/os_app_hooks.o" "/home/root/ckan/src/application/os_app_hooks.c"
+Finalizada generacion /home/root/ckan/src/application/os_app_hooks.c
+
+
+
+
+
+
+
+
+Invocando: Cross GCC Compiler
+gcc 
+-I /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/lib/Micrium/Software/uC-CPU 
+-I /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/include 
+-I /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/lib/Micrium/Software/uC-CPU/Posix/GNU 
+-I /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/lib/Micrium/Software/uC-LIB 
+-I /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/lib/Micrium/Software/uCOS-III/Source 
+-I /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/lib/Micrium/Software/uCOS-III/Ports/POSIX/GNU 
+-I /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/include/libxively 
+-I /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/lib/mqtt 
+-O0 -g3 -Wall -c -fmessage-length=0 -std=gnu99 -Iinclude -fstrict-aliasing -Wall -Wextra  
+-Wunused-function 
+-MMD -MP -MF"/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/application/os_app_hooks.d" -MT"/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/application/os_app_hooks.o" 
+-o "/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/build/Debug/obj/application/os_app_hooks.o" 
+"/home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/src/application/os_app_hooks.c"
+Finalizada generacion /home/ramirobuenomartinez/Documentos/proyectos/IoT-Project/SN-RTOS/AQ_RTOS/src/application/os_app_hooks.c
+
+
+
+
+
+
+
+
+
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_cfg_app.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_core.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_dbg.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_flag.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_int.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_mem.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_mon.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_msg.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_mutex.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_pend_multi.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_prio.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_q.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_sem.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_stat.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_task.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_tick.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_time.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_tmr.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Source/os_var.c
+/home/root/ckan/lib/Micrium/Software/uCOS-III/Ports/POSIX/GNU/os_cpu_c.c
+/home/root/ckan/lib/Micrium/Software/uC-LIB/lib_ascii.c
+/home/root/ckan/lib/Micrium/Software/uC-LIB/lib_math.c
+/home/root/ckan/lib/Micrium/Software/uC-LIB/lib_mem.c
+/home/root/ckan/lib/Micrium/Software/uC-LIB/lib_str.c
+/home/root/ckan/lib/Micrium/Software/uC-CPU/Posix/GNU/cpu_c.c
+/home/root/ckan/src/application/os_app_hooks.c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
